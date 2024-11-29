@@ -1,0 +1,6 @@
+
+# library files
+/node_modules
+
+# env
+.env.development

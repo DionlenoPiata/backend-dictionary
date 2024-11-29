@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  # backend:
+  #   build:
+  #     context: backend
+  #   container_name: backend
+  #   working_dir: /usr/app
+  #   volumes:
+  #     - ./backend:/usr/app
+  #     - /usr/app/node_modules
+  #   tty: true
+  #   ports:
+  #     - "3000:3000"
+  #   command: npm run start
+  #   depends_on:
+  #     - database
+  database:
+    image: mongo
+    container_name: database
+    command: mongod --quiet --logpath /dev/null
+    restart: always
+    tty: true
+    ports:
+      - 27017:27017
