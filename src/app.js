@@ -19,6 +19,7 @@ connectDatabase();
 
 // loading models
 const User = require("./models/user");
+const Entrie = require("./models/entrie");
 
 // routers
 const indexRoute = require("./routes/index-route");
