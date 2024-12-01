@@ -22,7 +22,7 @@ const User = require("./models/user");
 
 // routers
 const indexRoute = require("./routes/index-route");
-const userRoute = require("./routes/user-route");
+const authRoute = require("./routes/auth-route");
 
 // data conversion middleware
 app.use(express.json());
@@ -43,7 +43,7 @@ app.use(function (req, res, next) {
 
 // application routes
 app.use("/", indexRoute);
-app.use("/users", userRoute);
+app.use("/auth", authRoute);
 
 //app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 

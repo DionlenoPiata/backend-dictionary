@@ -9,12 +9,12 @@ exports.generateToken = async (data) => {
 };
 
 exports.decodeToken = async (token) => {
-  var data = await jwt.verify(token, process.env.SALT_KEY);
+  let data = await jwt.verify(token, process.env.SALT_KEY);
   return data;
 };
 
 exports.authorize = function (req, res, next) {
-  var token =
+  let token =
     req.body.token ||
     req.query.token ||
     req.headers[process.env.HEADERS_NAME_TOKEN];

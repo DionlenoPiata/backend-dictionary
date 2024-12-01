@@ -19,9 +19,22 @@ exports.post = async (req, res, next) => {
       return;
     }
 
-    await dao.create(data);
-    res.status(201).send({ message: "Cadastro realizado com sucesso!" });
+    let user = await dao.create(data);
+    console.log("user: ", user);
+
+    const token = await authenticate.generateToken({
+      id: user._id,
+      email: user.email,
+      name: user.name,
+    });
+
+    res.status(201).send({
+      id: user._id,
+      name: user.name,
+      token,
+    });
   } catch (e) {
+    console.log("errror: ", e);
     res.status(500).send({ message: "Falha ao processar a requisição!" });
   }
 };
@@ -45,11 +58,9 @@ exports.authenticate = async (req, res, next) => {
     });
 
     res.status(201).send({
+      id: user._id,
+      name: user.name,
       token: token,
-      data: {
-        email: user.email,
-        name: user.name,
-      },
     });
   } catch (e) {
     res.status(500).send({ message: "Falha ao processar a requisição!" });
