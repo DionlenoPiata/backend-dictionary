@@ -10,7 +10,7 @@ exports.execute = async () => {
 async function populate() {
   const entries = await entrieDao.get();
 
-  if (entries && entries.length === 0) {
+  if (entries && entries.totalDocs === 0) {
     console.log(`${new Date()} - Populate database: Entries...`);
     let config = {
       method: "get",

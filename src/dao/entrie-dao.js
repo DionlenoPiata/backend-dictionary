@@ -3,8 +3,29 @@
 const mongoose = require("mongoose");
 const Document = mongoose.model("Entrie");
 
-exports.get = async () => {
-  let res = await Document.find({});
+exports.get = async (search, page = 1, limit = process.env.LIMIT) => {
+  let query = {};
+
+  if (search) {
+    query = {
+      $or: [{ word: { $regex: `^${search}`, $options: "i" } }],
+    };
+  }
+
+  let queries = [
+    Document.find(query)
+      .skip(parseInt((page - 1) * limit))
+      .limit(parseInt(limit))
+      .sort({ flight_number: -1 }),
+    Document.countDocuments(query),
+  ];
+  let queriesResult = await Promise.all(queries);
+
+  let res = {};
+  res["result"] = queriesResult[0].map((el) => el.word);
+  res["totalDocs"] = queriesResult[1];
+  res["totalPages"] = Math.ceil(queriesResult[1] / limit);
+
   return res;
 };
 

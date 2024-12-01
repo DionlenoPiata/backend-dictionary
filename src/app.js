@@ -24,6 +24,7 @@ const Entrie = require("./models/entrie");
 // routers
 const indexRoute = require("./routes/index-route");
 const authRoute = require("./routes/auth-route");
+const entrieRoute = require("./routes/entrie-route");
 
 // data conversion middleware
 app.use(express.json());
@@ -45,6 +46,7 @@ app.use(function (req, res, next) {
 // application routes
 app.use("/", indexRoute);
 app.use("/auth", authRoute);
+app.use("/entries", entrieRoute);
 
 //app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
