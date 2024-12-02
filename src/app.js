@@ -45,7 +45,7 @@ app.use(function (req, res, next) {
 });
 
 // documentation settings
-//const swaggerFile = require("./docs/swagger_output.json");
+const swaggerFile = require("./docs/swagger_output.json");
 
 // application routes
 app.use("/", indexRoute);
@@ -53,6 +53,6 @@ app.use("/auth", authRoute);
 app.use("/entries", entrieRoute);
 app.use("/user", userRoute);
 
-//app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 module.exports = app;

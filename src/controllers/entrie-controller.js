@@ -17,9 +17,6 @@ exports.get = async (req, res, next) => {
                 description: "Retornar a lista de palavras do dicionário, com paginação e suporte a busca.",
                 content: {
                     "application/json": {
-                        schema:{
-                            $ref: "#/components/schemas/launcheResponse"
-                        }
                     }           
                 }
             }   
