@@ -17,15 +17,26 @@ const doc = {
   },
   servers: [
     {
-      url: `localhost:3000`,
+      url: ``,
     },
   ],
-
   components: {
     schemas: {
       indexResponse: {
         message: `1.0.0`,
       },
+      signupRequest: {
+        name: "Dionleno",
+        email: "email.test@email.com",
+        password: "123",
+      },
+    },
+  },
+  definitions: {
+    AddUser: {
+      $name: "Jhon Doe",
+      email: 29,
+      password: "",
     },
   },
 };

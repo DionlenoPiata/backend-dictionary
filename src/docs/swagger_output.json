@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "localhost:3000"
+      "url": ""
     }
   ],
   "paths": {
@@ -28,9 +28,12 @@
         }
       }
     },
-    "/signup": {
+    "/auth/signup": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint para registrar um usuário",
         "responses": {
           "200": {
             "description": "OK"
@@ -43,25 +46,18 @@
           }
         },
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "password": {
-                    "example": "any"
-                  },
-                  "email": {
-                    "example": "any"
-                  }
-                }
+                "$ref": "#/components/schemas/signupRequest"
               }
             }
           }
         }
       }
     },
-    "/signin": {
+    "/auth/signin": {
       "post": {
         "description": "",
         "responses": {
@@ -94,7 +90,7 @@
         }
       }
     },
-    "/me": {
+    "/user/me": {
       "get": {
         "description": "",
         "parameters": [
@@ -119,46 +115,7 @@
         }
       }
     },
-    "/me/history": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "token",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/me/favorites": {
+    "/user/me/history": {
       "get": {
         "description": "",
         "parameters": [
@@ -197,7 +154,46 @@
         }
       }
     },
-    "/en": {
+    "/user/me/favorites": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/entries/en": {
       "get": {
         "tags": [
           "Entrie"
@@ -249,7 +245,7 @@
         }
       }
     },
-    "/en/{word}": {
+    "/entries/en/{word}": {
       "get": {
         "description": "",
         "parameters": [
@@ -285,7 +281,7 @@
         }
       }
     },
-    "/en/{word}/favorite": {
+    "/entries/en/{word}/favorite": {
       "post": {
         "description": "",
         "parameters": [
@@ -338,7 +334,7 @@
         }
       }
     },
-    "/en/{word}/unfavorite": {
+    "/entries/en/{word}/unfavorite": {
       "delete": {
         "description": "",
         "parameters": [
@@ -402,6 +398,43 @@
             "example": "1.0.0"
           }
         }
+      },
+      "signupRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Dionleno"
+          },
+          "email": {
+            "type": "string",
+            "example": "email.test@email.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "123"
+          }
+        }
+      },
+      "AddUser": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Jhon Doe"
+          },
+          "email": {
+            "type": "number",
+            "example": 29
+          },
+          "password": {
+            "type": "string",
+            "example": ""
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     }
   }

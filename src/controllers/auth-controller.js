@@ -6,6 +6,20 @@ const authenticate = require("../services/auth-service");
 
 exports.post = async (req, res, next) => {
   try {
+    // #swagger.tags = ['Auth']
+    // #swagger.description = 'Endpoint para registrar um usuário'
+
+    /*  #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/signupRequest"
+                    }  
+                }
+            }
+        } 
+    */
     let data = req.body;
     data.password = md5(req.body.password + process.env.SALT_KEY);
 

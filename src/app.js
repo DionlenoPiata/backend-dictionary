@@ -49,9 +49,9 @@ const swaggerFile = require("./docs/swagger_output.json");
 
 // application routes
 app.use("/", indexRoute);
-app.use("/auth", authRoute);
-app.use("/entries", entrieRoute);
-app.use("/user", userRoute);
+app.use("/", authRoute);
+app.use("/", entrieRoute);
+app.use("/", userRoute);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
