@@ -4,6 +4,7 @@ const axios = require("axios");
 const dao = require("../dao/entrie-dao");
 const historyDao = require("../dao/history-dao");
 const favoriteDao = require("../dao/favorite-dao");
+const { fetchDataCache } = require("../utils/fetchDataCache");
 
 exports.get = async (req, res, next) => {
   try {
@@ -44,12 +45,11 @@ exports.getByWord = async (req, res, next) => {
     let wordAux = await dao.findBy(1, { word }, true);
 
     if (wordAux) {
-      let config = {
-        method: "get",
-        url: `${process.env.URL_API_DICTIONARY}${word}`,
-      };
-
-      const { data } = await axios.request(config);
+      const data = await fetchDataCache(
+        word,
+        () => fetchExternalData(word),
+        process.env.CACHE_TTL
+      );
 
       await historyDao.create({
         user: req.body.user.id,
@@ -131,4 +131,14 @@ exports.unfavorite = async (req, res, next) => {
     console.log("error: ", e);
     res.status(500).send({ message: "Falha ao processar a requisição!" });
   }
+};
+
+const fetchExternalData = async (word) => {
+  let config = {
+    method: "get",
+    url: `${process.env.URL_API_DICTIONARY}${word}`,
+  };
+
+  const { data } = await axios.request(config);
+  return data;
 };

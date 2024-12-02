@@ -22,6 +22,7 @@ const User = require("./models/user");
 const Entrie = require("./models/entrie");
 const History = require("./models/history");
 const Favorite = require("./models/favorite");
+const Cache = require("./models/cache");
 
 // routers
 const indexRoute = require("./routes/index-route");
