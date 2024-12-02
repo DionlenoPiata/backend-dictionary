@@ -59,7 +59,10 @@
     },
     "/auth/signin": {
       "post": {
-        "description": "",
+        "tags": [
+          "Auth"
+        ],
+        "description": "Endpoint para autenticação do usuário",
         "responses": {
           "201": {
             "description": "Created"

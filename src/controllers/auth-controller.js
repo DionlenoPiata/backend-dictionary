@@ -53,6 +53,8 @@ exports.post = async (req, res, next) => {
 };
 
 exports.authenticate = async (req, res, next) => {
+  // #swagger.tags = ['Auth']
+  // #swagger.description = 'Endpoint para autenticação do usuário'
   try {
     const user = await dao.authenticate({
       email: req.body.email,
