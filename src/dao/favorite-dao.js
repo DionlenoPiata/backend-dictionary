@@ -1,28 +1,28 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const Document = mongoose.model("Entrie");
+const Document = mongoose.model("Favorite");
 
-exports.get = async (search, page = 1, limit = process.env.LIMIT) => {
-  let query = {};
-
-  if (search) {
-    query = {
-      $or: [{ word: { $regex: `^${search}`, $options: "i" } }],
-    };
-  }
+exports.getByUser = async (user, page = 1, limit = process.env.LIMIT) => {
+  let query = {
+    user,
+  };
 
   let queries = [
     Document.find(query)
       .skip(parseInt((page - 1) * limit))
       .limit(parseInt(limit))
+      .populate("entrie")
       .sort({ flight_number: -1 }),
     Document.countDocuments(query),
   ];
   let queriesResult = await Promise.all(queries);
 
   let res = {};
-  res["result"] = queriesResult[0].map((el) => el.word);
+  res["result"] = queriesResult[0].map((el) => ({
+    word: el.entrie.word,
+    added: el.created_at,
+  }));
   res["totalDocs"] = queriesResult[1];
   res["totalPages"] = Math.ceil(queriesResult[1] / limit);
 
@@ -58,11 +58,6 @@ exports.findBy = async (page, by, findOne, filter, populate) => {
 exports.create = async (data) => {
   let document = new Document(data);
   const res = await document.save();
-  return res;
-};
-
-exports.createMany = async (data) => {
-  const res = await Document.insertMany(data);
   return res;
 };
 

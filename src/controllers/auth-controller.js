@@ -20,7 +20,6 @@ exports.post = async (req, res, next) => {
     }
 
     let user = await dao.create(data);
-    console.log("user: ", user);
 
     const token = await authenticate.generateToken({
       id: user._id,

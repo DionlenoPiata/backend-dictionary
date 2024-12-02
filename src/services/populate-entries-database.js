@@ -15,7 +15,7 @@ async function populate() {
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words_dictionary.json",
+      url: process.env.URL_API_DATASOURCE_WORDS,
     };
 
     try {

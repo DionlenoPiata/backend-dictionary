@@ -7,8 +7,12 @@ const controller = require("../controllers/entrie-controller");
 const authService = require("../services/auth-service");
 
 router.get("/en", authService.authorize, controller.get);
-// router.get("/en/:word", controller.getByWord);
-// router.post("/en/:word/favorite", controller.favorite);
-// router.delete("/en/:word/unfavorite", controller.unfavorite);
+router.get("/en/:word", authService.authorize, controller.getByWord);
+router.post("/en/:word/favorite", authService.authorize, controller.favorite);
+router.delete(
+  "/en/:word/unfavorite",
+  authService.authorize,
+  controller.unfavorite
+);
 
 module.exports = router;

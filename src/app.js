@@ -20,11 +20,14 @@ connectDatabase();
 // loading models
 const User = require("./models/user");
 const Entrie = require("./models/entrie");
+const History = require("./models/history");
+const Favorite = require("./models/favorite");
 
 // routers
 const indexRoute = require("./routes/index-route");
 const authRoute = require("./routes/auth-route");
 const entrieRoute = require("./routes/entrie-route");
+const userRoute = require("./routes/user-route");
 
 // data conversion middleware
 app.use(express.json());
@@ -47,6 +50,7 @@ app.use(function (req, res, next) {
 app.use("/", indexRoute);
 app.use("/auth", authRoute);
 app.use("/entries", entrieRoute);
+app.use("/user", userRoute);
 
 //app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 

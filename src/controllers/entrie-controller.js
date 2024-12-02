@@ -1,13 +1,15 @@
 "use strict";
 
+const axios = require("axios");
 const dao = require("../dao/entrie-dao");
+const historyDao = require("../dao/history-dao");
+const favoriteDao = require("../dao/favorite-dao");
 
 exports.get = async (req, res, next) => {
   try {
     // #swagger.tags = ['Entrie']
     // #swagger.description = 'Endpoint para obter entries'
     let { search, page = 1, limit } = req.query;
-
     let { result, totalDocs, totalPages } = await dao.get(search, page, limit);
 
     /*  #swagger.responses[200] = {
@@ -31,31 +33,102 @@ exports.get = async (req, res, next) => {
       hasPrev: page > 1,
     });
   } catch (e) {
-    console.log("errror: ", e);
+    console.log("error: ", e);
     res.status(500).send({ message: "Falha ao processar a requisição!" });
   }
 };
 
-// exports.getByWord = async (req, res, next) => {
-//   try {
-//   } catch (e) {
-//     console.log("errror: ", e);
-//     res.status(500).send({ message: "Falha ao processar a requisição!" });
-//   }
-// };
+exports.getByWord = async (req, res, next) => {
+  try {
+    let { word } = req.params;
+    let wordAux = await dao.findBy(1, { word }, true);
 
-// exports.favorite = async (req, res, next) => {
-//   try {
-//   } catch (e) {
-//     console.log("errror: ", e);
-//     res.status(500).send({ message: "Falha ao processar a requisição!" });
-//   }
-// };
+    if (wordAux) {
+      let config = {
+        method: "get",
+        url: `${process.env.URL_API_DICTIONARY}${word}`,
+      };
 
-// exports.unfavorite = async (req, res, next) => {
-//   try {
-//   } catch (e) {
-//     console.log("errror: ", e);
-//     res.status(500).send({ message: "Falha ao processar a requisição!" });
-//   }
-// };
+      const { data } = await axios.request(config);
+
+      await historyDao.create({
+        user: req.body.user.id,
+        entrie: wordAux._id,
+      });
+
+      res.status(200).send({
+        result: data,
+      });
+    } else {
+      res.status(400).send({
+        message: "Palavra não encontrada!",
+      });
+    }
+  } catch (e) {
+    console.log("error: ", e);
+    res.status(500).send({ message: "Falha ao processar a requisição!" });
+  }
+};
+
+exports.favorite = async (req, res, next) => {
+  try {
+    let { word } = req.params;
+    let wordAux = await dao.findBy(1, { word }, true);
+
+    if (wordAux) {
+      let isFavorited = await favoriteDao.findBy(
+        1,
+        { user: req.body.user.id, entrie: wordAux._id },
+        true
+      );
+
+      if (!isFavorited) {
+        await favoriteDao.create({
+          user: req.body.user.id,
+          entrie: wordAux._id,
+        });
+      }
+
+      res.status(200).send({
+        message: "Palavra adicionada aos favoritos com sucesso!",
+      });
+    } else {
+      res.status(400).send({
+        message: "Palavra não encontrada!",
+      });
+    }
+  } catch (e) {
+    console.log("error: ", e);
+    res.status(500).send({ message: "Falha ao processar a requisição!" });
+  }
+};
+
+exports.unfavorite = async (req, res, next) => {
+  try {
+    let { word } = req.params;
+    let wordAux = await dao.findBy(1, { word }, true);
+
+    if (wordAux) {
+      let isFavorited = await favoriteDao.findBy(
+        1,
+        { user: req.body.user.id, entrie: wordAux._id },
+        true
+      );
+
+      if (isFavorited) {
+        await favoriteDao.delete(isFavorited._id);
+      }
+
+      res.status(200).send({
+        message: "Palavra retirada dos favoritos com sucesso!",
+      });
+    } else {
+      res.status(400).send({
+        message: "Palavra não encontrada!",
+      });
+    }
+  } catch (e) {
+    console.log("error: ", e);
+    res.status(500).send({ message: "Falha ao processar a requisição!" });
+  }
+};

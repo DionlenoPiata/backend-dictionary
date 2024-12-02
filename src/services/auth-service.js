@@ -13,8 +13,8 @@ exports.decodeToken = async (token) => {
   return data;
 };
 
-exports.authorize = function (req, res, next) {
-  let token =
+exports.authorize = async function (req, res, next) {
+  var token =
     req.body.token ||
     req.query.token ||
     req.headers[process.env.HEADERS_NAME_TOKEN];
@@ -24,12 +24,13 @@ exports.authorize = function (req, res, next) {
       message: "Acesso Restrito",
     });
   } else {
-    jwt.verify(token, process.env.SALT_KEY, function (error, decoded) {
+    jwt.verify(token, process.env.SALT_KEY, async function (error, decoded) {
       if (error) {
         res.status(401).json({
           message: "Token Inválido",
         });
       } else {
+        req.body["user"] = decoded;
         next();
       }
     });
